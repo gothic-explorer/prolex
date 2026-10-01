@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--ARTIFACT-START-->
+<title>ProLex Espace Avocat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
+<style>
+/* Layout : coque d'application — rail latéral ≥ 960px, barre d'onglets basse sur mobile ; colonne de contenu max 1180px */
+:root{
+  --bg:#f2f5f7; --surface:#ffffff; --surface-2:#e8edf1; --line:#d3dce2;
+  --fg:#13202a; --muted:#56656f;
+  --ink:#17405f; --ink-hover:#0e304b; --on-ink:#ffffff;
+  --brass:#946417;
+  --ok:#16774a; --warn:#b05800; --danger:#b3261e; --info:#2a5c99;
+  --paper:#fbf9f2; --paper-fg:#23211c; --paper-line:#e2dbc8;
+  --shadow:0 1px 2px rgb(16 32 48 / .06), 0 6px 20px rgb(16 32 48 / .07);
+  --scrim:rgb(10 20 30 / .45);
+  --f-display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-ar:"IBM Plex Sans Arabic", "IBM Plex Sans", Tahoma, "Arial", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:10px;
+  --rail:236px;
+  --tabbar:64px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1419; --surface:#151d24; --surface-2:#1c262f; --line:#2a3741;
+    --fg:#e2e9ee; --muted:#95a3ae;
+    --ink:#86b6e2; --ink-hover:#a5c9ec; --on-ink:#0b1a27;
+    --brass:#d8a956;
+    --ok:#4cc28a; --warn:#f0a34c; --danger:#f2766b; --info:#7fb0ea;
+    --paper:#e6e1d3; --paper-fg:#211f1a; --paper-line:#cbc3ad;
+    --shadow:0 1px 2px rgb(0 0 0 / .3), 0 6px 20px rgb(0 0 0 / .3);
+    --scrim:rgb(0 0 0 / .6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1419; --surface:#151d24; --surface-2:#1c262f; --line:#2a3741;
+  --fg:#e2e9ee; --muted:#95a3ae;
+  --ink:#86b6e2; --ink-hover:#a5c9ec; --on-ink:#0b1a27;
+  --brass:#d8a956;
+  --ok:#4cc28a; --warn:#f0a34c; --danger:#f2766b; --info:#7fb0ea;
+  --paper:#e6e1d3; --paper-fg:#211f1a; --paper-line:#cbc3ad;
+  --shadow:0 1px 2px rgb(0 0 0 / .3), 0 6px 20px rgb(0 0 0 / .3);
+  --scrim:rgb(0 0 0 / .6);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+[dir="rtl"] body{font-family:var(--f-ar)}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--ink)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1{font:600 1.65rem/1.2 var(--f-display);letter-spacing:-.01em}
+h2{font:600 1.15rem/1.3 var(--f-display)}
+h3{font-size:.95rem;font-weight:600}
+[dir="rtl"] h1,[dir="rtl"] h2{font-family:var(--f-ar)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.ar{font-family:var(--f-ar);direction:rtl;unicode-bidi:isolate}
+.muted{color:var(--muted)}
+.small{font-size:.82rem}
+.eyebrow{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+/* ---------- Coque ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.15rem var(--f-display);color:var(--fg);text-decoration:none;margin-inline-end:auto}
+.brand-mark{width:30px;height:30px;border-radius:8px;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font:700 .95rem var(--f-display)}
+.brand small{font:500 .72rem var(--f-body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.net{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:.8rem;font-weight:600;cursor:pointer}
+.net .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 20%,transparent)}
+.net.off{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
+.net.off .dot{background:var(--warn);box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 22%,transparent)}
+.net .q{font-family:var(--f-mono);font-size:.72rem;padding:0 6px;border-radius:999px;background:color-mix(in srgb,var(--warn) 18%,transparent)}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 10px;font-size:.8rem;font-weight:600;cursor:pointer}
+.iconbtn:hover{background:var(--surface-2)}
+.who{display:none;align-items:center;gap:8px;font-size:.85rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:color-mix(in srgb,var(--brass) 22%,var(--surface));color:var(--brass);display:grid;place-items:center;font-weight:700;font-size:.8rem}
+
+.shell{display:block}
+.rail{display:none}
+.tabbar{position:fixed;inset-inline:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar button,.rail button{border:0;background:none;cursor:pointer;color:var(--muted)}
+.tabbar button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 9px;font-size:.72rem;font-weight:600;position:relative}
+.tabbar button[aria-current="page"]{color:var(--ink)}
+.tabbar svg,.rail svg{width:22px;height:22px}
+.badge-n{position:absolute;top:4px;inset-inline-start:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--warn);color:#fff;font:600 .68rem/18px var(--f-mono)}
+main{padding:20px 16px calc(var(--tabbar) + 28px);max-width:1180px;margin-inline:auto;min-width:0}
+
+@media (min-width:960px){
+  .shell{display:grid;grid-template-columns:var(--rail) minmax(0,1fr)}
+  .tabbar{display:none}
+  .rail{display:flex;flex-direction:column;gap:4px;padding:18px 12px;border-inline-end:1px solid var(--line);background:var(--surface);position:sticky;top:calc(57px + env(safe-area-inset-top,0px));height:calc(100vh - 57px);align-self:start}
+  .rail button{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-weight:600;font-size:.92rem;text-align:start}
+  .rail button:hover{background:var(--surface-2);color:var(--fg)}
+  .rail button[aria-current="page"]{background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink)}
+  .rail .badge-n{position:static;margin-inline-start:auto}
+  .rail-foot{margin-top:auto;padding:12px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line)}
+  main{padding:28px 32px 48px}
+  .who{display:flex}
+}
+
+/* ---------- Composants ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);padding:9px 15px;font-weight:600;font-size:.9rem;cursor:pointer;text-decoration:none;color:var(--fg);white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.btn.primary:hover{background:var(--ink-hover)}
+.btn.danger{color:var(--danger)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.sm{padding:5px 10px;font-size:.8rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn svg{width:18px;height:18px}
+.link{border:0;background:none;padding:0;color:var(--ink);font-weight:600;cursor:pointer}
+
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:.74rem;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.chip.cours{background:color-mix(in srgb,var(--info) 13%,transparent);color:var(--info)}
+.chip.juge{background:color-mix(in srgb,var(--ok) 13%,transparent);color:var(--ok)}
+.chip.appel{background:color-mix(in srgb,var(--brass) 16%,transparent);color:var(--brass)}
+.chip.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)}
+.chip.ok{background:color-mix(in srgb,var(--ok) 13%,transparent);color:var(--ok)}
+.chip.neutral{background:var(--surface-2);color:var(--muted)}
+.chip.line{border-color:var(--line);color:var(--muted)}
+.chip.danger{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 16px;margin-bottom:20px}
+.page-head .grow{flex:1 1 260px;min-width:0}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;color:var(--muted);background:none;border:0;padding:0;cursor:pointer;margin-bottom:8px}
+.back:hover{color:var(--ink)}
+[dir="rtl"] .back svg,[dir="rtl"] .flip{transform:scaleX(-1)}
+.section{display:grid;gap:12px;margin-top:26px}
+.section-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.section-head h2{margin-inline-end:auto}
+
+/* Recherche */
+.search{position:relative;flex:1 1 320px;min-width:0}
+.search input{width:100%;padding:11px 14px 11px 40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:.95rem}
+[dir="rtl"] .search input{padding:11px 40px 11px 14px}
+.search svg{position:absolute;inset-inline-start:13px;top:50%;translate:0 -50%;width:18px;height:18px;color:var(--muted)}
+.search .perf{position:absolute;inset-inline-end:12px;top:50%;translate:0 -50%;font:500 .7rem var(--f-mono);color:var(--muted)}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--muted)}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* Tableau dossiers */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:start;font-weight:600;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.row{cursor:pointer}
+tbody tr.row:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.role{font:500 .9rem var(--f-mono);font-variant-numeric:tabular-nums;color:var(--fg);white-space:nowrap}
+mark{background:color-mix(in srgb,var(--brass) 30%,transparent);color:inherit;border-radius:2px}
+.list-cards{display:grid;gap:10px}
+.dcard{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);cursor:pointer;text-align:start;width:100%}
+.dcard .top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.dcard .parties{font-weight:600}
+.dcard .meta{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}
+.only-desktop{display:none}
+@media (min-width:760px){.only-desktop{display:block}.only-mobile{display:none}}
+.empty{padding:36px 16px;text-align:center;color:var(--muted)}
+
+/* Formulaires */
+.form{display:grid;gap:18px;max-width:720px}
+.field{display:grid;gap:6px}
+.field label,.field .label{font-weight:600;font-size:.9rem;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.field label .ar,.field .label .ar{font-weight:500;color:var(--muted)}
+.req{color:var(--danger)}
+.input,select.input,textarea.input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-size:.95rem}
+textarea.input{min-height:96px;resize:vertical;line-height:1.6}
+.input[aria-invalid="true"]{border-color:var(--danger)}
+.hint{font-size:.8rem;color:var(--muted)}
+.hint.err{color:var(--danger);font-weight:600}
+.hint.warn{color:var(--warn)}
+.grid2{display:grid;gap:18px}
+@media (min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+.seg{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg label{position:relative;flex:1 1 120px;display:grid;justify-items:center;gap:1px;padding:10px 8px;cursor:pointer;font-weight:600;font-size:.88rem;text-align:center;border-inline-end:1px solid var(--line)}
+.seg label:last-child{border-inline-end:0}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label .ar{font-weight:500;font-size:.8rem;color:var(--muted)}
+.seg label:has(input:checked){background:var(--ink);color:var(--on-ink)}
+.seg label:has(input:checked) .ar{color:inherit;opacity:.85}
+.seg label:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:-3px}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;padding-top:6px}
+.phrases{display:flex;gap:6px;flex-wrap:wrap;direction:rtl}
+.phrases button{border:1px dashed var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font:500 .8rem var(--f-ar);cursor:pointer;color:var(--muted)}
+.phrases button:hover{color:var(--ink);border-color:var(--ink)}
+
+/* Fiche dossier */
+.case-head{display:grid;gap:14px;padding:18px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.case-head .row1{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.case-head .rolebig{font:500 1.5rem var(--f-mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.case-head .facts{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.fact .eyebrow{display:block;margin-bottom:2px}
+.fact .v{font-weight:600}
+.channels{display:grid;gap:12px}
+@media (min-width:760px){.channels{grid-template-columns:1.4fr 1fr}}
+.drop{display:grid;place-items:center;gap:8px;text-align:center;padding:26px 16px;border:2px dashed var(--line);border-radius:var(--r);background:var(--surface);cursor:pointer;min-height:150px;transition:border-color .15s, background .15s}
+.drop:hover,.drop.over{border-color:var(--ink);background:color-mix(in srgb,var(--ink) 5%,var(--surface))}
+.drop svg{width:30px;height:30px;color:var(--ink)}
+.camera{display:grid;place-items:center;gap:8px;text-align:center;padding:22px 16px;border-radius:var(--r);background:var(--ink);color:var(--on-ink);border:0;cursor:pointer;min-height:150px}
+.camera svg{width:32px;height:32px}
+.camera .small{opacity:.8}
+@media (max-width:759px){.channels .camera{order:-1}}
+.pieces{display:grid;gap:8px}
+.piece{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.piece .thumb{width:44px;height:56px;border-radius:4px;background:var(--paper);border:1px solid var(--paper-line);display:grid;place-items:center;font:600 .62rem var(--f-mono);color:var(--paper-fg);overflow:hidden;text-transform:uppercase}
+.piece .thumb img{width:100%;height:100%;object-fit:cover}
+.piece .t{font-weight:600;overflow-wrap:anywhere}
+.piece .m{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.8rem;color:var(--muted);margin-top:3px}
+.piece .acts{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+@media (min-width:760px){.piece{grid-template-columns:auto minmax(0,1fr) auto}.piece .acts{grid-column:auto}}
+
+/* Audiences */
+.day{display:grid;gap:8px;margin-top:18px}
+.day:first-child{margin-top:0}
+.day-label{display:flex;align-items:baseline;gap:10px;font-weight:600}
+.day-label .muted{font-weight:500;font-size:.82rem}
+.hcard{display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 14px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);text-align:start;width:100%;cursor:pointer;position:relative}
+.hcard:hover{border-color:color-mix(in srgb,var(--ink) 45%,var(--line))}
+.hcard .time{grid-row:span 3;font:500 1.3rem var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.1}
+.hcard .time small{display:block;font:500 .72rem var(--f-body);color:var(--muted);margin-top:4px}
+.hcard .l1{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.hcard .client{font-weight:600}
+.hcard .l2{font-size:.85rem;color:var(--muted)}
+.hcard .l3{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.hcard.dirty{border-color:color-mix(in srgb,var(--warn) 55%,var(--line));background:color-mix(in srgb,var(--warn) 5%,var(--surface))}
+.hcard.done .time{color:var(--muted)}
+.cache-note{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-radius:var(--r);background:var(--surface-2);font-size:.83rem;color:var(--muted);margin-bottom:16px}
+.cache-note.off{background:color-mix(in srgb,var(--warn) 12%,var(--surface));color:var(--fg)}
+.cache-note svg{width:18px;height:18px;flex:none}
+.hearing-sum{display:grid;gap:4px;padding:14px;border-radius:var(--r);background:var(--surface-2);margin-bottom:20px}
+
+/* Écran scindé */
+.tr-head{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-bottom:14px}
+.tr-head .grow{flex:1 1 240px;min-width:0}
+.tr-title{font:600 1.2rem var(--f-display)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.langsel button{border:0;background:var(--surface);padding:6px 12px;font-weight:600;font-size:.82rem;cursor:pointer;color:var(--muted)}
+.langsel button[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.paneswitch{display:flex;margin-bottom:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.paneswitch button{flex:1;border:0;background:var(--surface);padding:9px;font-weight:600;font-size:.88rem;cursor:pointer;color:var(--muted)}
+.paneswitch button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.split{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.pane{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);display:flex;flex-direction:column;min-width:0;min-height:520px}
+.pane-bar{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pane-bar .label{font-weight:600;font-size:.85rem;margin-inline-end:auto}
+.vbtn{border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:32px;height:30px;padding:0 8px;cursor:pointer;font-weight:600;display:inline-grid;place-items:center}
+.vbtn:hover{background:var(--surface-2)}
+.vbtn svg{width:16px;height:16px}
+.zoomv{font:500 .78rem var(--f-mono);min-width:44px;text-align:center;color:var(--muted)}
+.viewport{flex:1;overflow:auto;background:var(--surface-2);padding:22px 16px;display:flex;justify-content:center;align-items:flex-start;max-height:72vh}
+.paper-wrap{width:100%;max-width:540px;transform-origin:top center;transition:transform .2s}
+.paper{width:100%;background:var(--paper);color:var(--paper-fg);padding:clamp(18px,5%,34px) clamp(16px,6%,34px) 44px;box-shadow:0 2px 6px rgb(0 0 0 / .12), 0 12px 30px rgb(0 0 0 / .08);direction:rtl;font:400 .95rem/2 var(--f-ar);position:relative;user-select:text}
+.paper .hdr{display:flex;justify-content:space-between;font-size:.8rem;line-height:1.6;border-bottom:1px solid var(--paper-line);padding-bottom:10px;margin-bottom:14px}
+.paper .ttl{text-align:center;font-weight:600;font-size:1.05rem;margin:4px 0 12px}
+.paper p{margin:0 0 8px;text-align:justify}
+.paper .seal{position:absolute;inset-inline-start:34px;bottom:26px;width:84px;height:84px;border-radius:50%;border:2px solid color-mix(in srgb,#2c4f8a 70%,transparent);color:color-mix(in srgb,#2c4f8a 80%,transparent);display:grid;place-items:center;text-align:center;font-size:.6rem;line-height:1.3;rotate:-12deg}
+.paper img{display:block;width:100%;height:auto}
+.paper.img{padding:10px}
+.ai-tabs{display:flex;gap:2px;padding:6px 8px 0;border-bottom:1px solid var(--line)}
+.ai-tabs button{border:0;background:none;padding:9px 12px;font-weight:600;font-size:.88rem;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.ai-tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.ai-body{padding:16px;flex:1;overflow:auto;max-height:72vh}
+.ai-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.summary{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.summary li{position:relative;padding:10px 12px 10px 34px;border:1px solid transparent;border-radius:8px;background:var(--surface-2);line-height:1.55;cursor:text}
+[dir="rtl"] .summary li{padding:10px 34px 10px 12px}
+.summary li::before{content:"";position:absolute;inset-inline-start:14px;top:18px;width:7px;height:7px;border-radius:50%;background:var(--brass)}
+.summary li:hover{border-color:var(--line)}
+.summary li:focus{outline:none;border-color:var(--ink);background:var(--surface)}
+.rte-bar{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.rte-bar .sep{width:1px;height:20px;background:var(--line);margin-inline:4px}
+.gloss{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px;font-size:.78rem}
+.gloss button{display:inline-flex;gap:6px;align-items:baseline;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 9px;font-size:.76rem;cursor:pointer}
+.gloss button:hover{border-color:var(--ink);color:var(--ink)}
+.gloss button .ar{color:var(--muted)}
+.rte{min-height:320px;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);line-height:1.75;font-size:.94rem}
+.rte:focus{outline:none;border-color:var(--ink)}
+.rte p{margin:0 0 10px}
+.rte p.c{text-align:center;font-weight:600}
+.actionbar{position:sticky;bottom:calc(var(--tabbar) + env(safe-area-inset-bottom,0px));z-index:5;margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
+.actionbar .grow{flex:1 1 220px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
+@media (min-width:960px){.actionbar{bottom:16px}}
+@media (min-width:900px){
+  .split{grid-template-columns:1fr 1fr}
+  .paneswitch{display:none}
+  .split .pane{display:flex!important}
+}
+@media (max-width:899px){
+  .split[data-pane="original"] .pane-ai{display:none}
+  .split[data-pane="ai"] .pane-orig{display:none}
+}
+.pipeline{display:grid;gap:12px;padding:24px 8px;max-width:420px;margin-inline:auto}
+.step{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;font-size:.9rem;color:var(--muted)}
+.step .ic{width:18px;height:18px;border-radius:50%;border:2px solid var(--line)}
+.step.run{color:var(--fg)}
+.step.run .ic{border-color:var(--ink);border-top-color:transparent;animation:spin .8s linear infinite}
+.step.done{color:var(--fg)}
+.step.done .ic{border-color:var(--ok);background:var(--ok)}
+.step.skip .ic{border-style:dashed}
+.step .ms{font:500 .75rem var(--f-mono)}
+.bar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .4s}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Synchro */
+.sync-grid{display:grid;gap:14px}
+@media (min-width:860px){.sync-grid{grid-template-columns:1fr 1fr}}
+.panel{padding:16px;display:grid;gap:10px;align-content:start}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.88rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:600}
+pre.payload{margin:0;padding:10px 12px;border-radius:8px;background:var(--surface-2);font:400 .76rem/1.5 var(--f-mono);overflow-x:auto;white-space:pre}
+.qitem{display:grid;gap:6px;padding:12px;border:1px solid var(--line);border-radius:8px}
+
+/* Modale & toast */
+.scrim{position:fixed;inset:0;z-index:50;background:var(--scrim);display:grid;place-items:end center;padding:0}
+@media (min-width:640px){.scrim{place-items:center;padding:24px}}
+.modal{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--surface);border-radius:16px 16px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;box-shadow:var(--shadow)}
+@media (min-width:640px){.modal{border-radius:14px;padding:22px}}
+.modal.wide{max-width:720px}
+.modal-head{display:flex;align-items:flex-start;gap:12px}
+.modal-head h2{margin-inline-end:auto}
+.lang-opts{display:grid;gap:10px}
+.lang-opt{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;text-align:start;width:100%}
+.lang-opt:hover{border-color:var(--ink)}
+.lang-opt .code{width:38px;height:38px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font:600 .85rem var(--f-mono)}
+.lang-opt .grow{flex:1}
+.crop{position:relative;border-radius:8px;overflow:hidden;background:#111;max-width:100%}
+.crop canvas{display:block;width:100%;height:auto}
+.crop .frame{position:absolute;inset:6%;border:2px solid #4fd18b;box-shadow:0 0 0 9999px rgb(0 0 0 / .45)}
+.crop .frame i{position:absolute;width:14px;height:14px;background:#4fd18b;border-radius:50%}
+.crop .frame i:nth-child(1){top:-8px;left:-8px}.crop .frame i:nth-child(2){top:-8px;right:-8px}.crop .frame i:nth-child(3){bottom:-8px;left:-8px}.crop .frame i:nth-child(4){bottom:-8px;right:-8px}
+.toggle-row{display:flex;align-items:center;gap:8px;font-size:.88rem}
+.readonly{padding:10px 12px;border-radius:8px;background:var(--surface-2);font-size:.9rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toasts{position:fixed;z-index:60;inset-inline:0;bottom:calc(var(--tabbar) + 14px + env(safe-area-inset-bottom,0px));display:grid;justify-items:center;gap:8px;pointer-events:none;padding-inline:16px}
+@media (min-width:960px){.toasts{bottom:24px}}
+.toast{pointer-events:auto;max-width:520px;padding:11px 16px;border-radius:10px;background:var(--fg);color:var(--bg);font-size:.88rem;font-weight:500;box-shadow:var(--shadow);animation:up .25s ease-out}
+.toast.warn{background:var(--warn);color:#fff}
+.toast.ok{background:var(--ok);color:#fff}
+@keyframes up{from{transform:translateY(8px);opacity:0}}
+.syncbanner{display:flex;align-items:center;gap:10px;padding:10px 16px;background:color-mix(in srgb,var(--info) 14%,var(--surface));color:var(--fg);font-size:.86rem;font-weight:600;border-bottom:1px solid var(--line)}
+.syncbanner .ic{width:16px;height:16px;border-radius:50%;border:2px solid var(--info);border-top-color:transparent;animation:spin .8s linear infinite}
+.demo-note{font-size:.78rem;color:var(--muted);display:flex;gap:6px;align-items:flex-start}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+<!--ARTIFACT-HEAD-END-->
+</head>
+<body>
+<!--ARTIFACT-BODY-START-->
+<header class="topbar">
+  <a class="brand" href="#" id="brand"><span class="brand-mark">P</span><span>ProLex<br><small data-i18n="space">Espace avocat</small></span></a>
+  <button class="net" id="net" type="button" title="Simuler la perte / le retour du réseau"></button>
+  <button class="iconbtn" id="langBtn" type="button" title="Basculer FR / AR">ع</button>
+  <div class="who"><span class="avatar">LH</span><span>Me Leïla Haddad</span></div>
+</header>
+<div id="syncbanner" class="syncbanner" hidden><span class="ic"></span><span id="syncText"></span></div>
+<div class="shell">
+  <nav class="rail" id="rail" aria-label="Navigation principale"></nav>
+  <main id="view"></main>
+</div>
+<nav class="tabbar" id="tabbar" aria-label="Navigation principale"></nav>
+<div id="modalRoot"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<input type="file" id="fileScan" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" hidden>
+<input type="file" id="filePhoto" accept="image/*" capture="environment" hidden>
+
+<script>
+(() => {
+'use strict';
+/* ================= Utilitaires ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random()*16|0; return (c === 'x' ? r : (r&3|8)).toString(16); });
+const LAWYER = 'Maître Leïla Haddad';
+const STORE = 'prolex-proto-avocat-v1';
+const pad = n => String(n).padStart(2, '0');
+const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+const isoOff = off => { const d = new Date(TODAY); d.setDate(d.getDate() + off); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const parse = iso => new Date(iso + 'T00:00:00');
+const daysFrom = iso => Math.round((parse(iso) - TODAY) / 864e5);
+const loc = () => state.lang === 'ar' ? 'ar-TN' : 'fr-FR';
+const fmtDate = (iso, o = {day:'numeric', month:'short', year:'numeric'}) => parse(iso).toLocaleDateString(loc(), o);
+const fmtDay = iso => parse(iso).toLocaleDateString(loc(), {weekday:'long', day:'numeric', month:'long'});
+const relDay = iso => { const n = daysFrom(iso); if (n === 0) return t('today'); if (n === 1) return t('tomorrow'); if (n === -1) return t('yesterday'); return n > 0 ? t('inDays').replace('{n}', n) : t('daysAgo').replace('{n}', -n); };
+
+const ICON = {
+  folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  sync:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.9L20 16M20 20v-4h-4"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  back:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  upload:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>',
+  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  rotate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7L20 8M20 3v5h-5"/></svg>',
+  cloud:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 9a4.5 4.5 0 0 0 1 9z"/></svg>',
+  cloudoff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M9 6.3A6 6 0 0 1 17.5 10a4 4 0 0 1 2.4 6.9M17 18H7a4.5 4.5 0 0 1-1.3-8.8"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+};
+
+/* ================= i18n (chrome de l'interface) ================= */
+const I18N = {
+  fr:{space:'Espace avocat', dossiers:'Dossiers', agenda:'Agenda', sync:'Synchro', online:'En ligne', offline:'Hors-ligne',
+      newCase:'Nouvelle affaire', searchPh:'Rechercher un client, un n° de rôle, un tribunal…', all:'Tous',
+      st_cours:'En cours', st_juge:'Jugé', st_appel:'En appel', today:"Aujourd'hui", tomorrow:'Demain', yesterday:'Hier',
+      inDays:'dans {n} j', daysAgo:'il y a {n} j', dash:'Mes dossiers', agendaT:'Agenda judiciaire', syncT:'Synchronisation',
+      week:'7 jours', day:'Jour', back:'Retour'},
+  ar:{space:'فضاء المحامي', dossiers:'الملفات', agenda:'الرزنامة', sync:'المزامنة', online:'متصل', offline:'غير متصل',
+      newCase:'قضية جديدة', searchPh:'ابحث عن حريف، رقم قضية، محكمة…', all:'الكل',
+      st_cours:'جارية', st_juge:'محكوم فيها', st_appel:'في الاستئناف', today:'اليوم', tomorrow:'غدا', yesterday:'أمس',
+      inDays:'بعد {n} أيام', daysAgo:'منذ {n} أيام', dash:'ملفاتي', agendaT:'رزنامة الجلسات', syncT:'المزامنة',
+      week:'7 أيام', day:'اليوم', back:'رجوع'}
+};
+const t = k => (I18N[state.lang] && I18N[state.lang][k]) || I18N.fr[k] || k;
+
+/* ================= Référentiels ================= */
+const CITY_AR = {'Tunis':'تونس','Ariana':'أريانة','Ben Arous':'بن عروس','La Marsa':'المرسى','Bizerte':'بنزرت','Nabeul':'نابل','Sousse':'سوسة','Monastir':'المنستير','Kairouan':'القيروان','Sfax':'صفاقس'};
+const deCity = c => c === 'Ariana' ? "de l'Ariana" : `de ${c}`;
+const COURTS = [];
+['Tunis','Ariana','Ben Arous','Bizerte','Nabeul','Sousse','Monastir','Kairouan','Sfax'].forEach(c => COURTS.push({id:'tpi-'+c, kind:'tpi', fr:`Tribunal de Première Instance ${deCity(c)}`, ar:`المحكمة الابتدائية ب${CITY_AR[c]}`, short:`TPI ${c}`}));
+['Tunis','Ariana','La Marsa','Sousse','Sfax'].forEach(c => COURTS.push({id:'can-'+c, kind:'canton', fr:`Tribunal de Canton ${deCity(c)}`, ar:`محكمة الناحية ب${CITY_AR[c]}`, short:`Canton ${c}`}));
+['Tunis','Bizerte','Nabeul','Sousse','Monastir','Sfax'].forEach(c => COURTS.push({id:'app-'+c, kind:'appel', fr:`Cour d'Appel ${deCity(c)}`, ar:`محكمة الاستئناف ب${CITY_AR[c]}`, short:`Appel ${c}`}));
+const court = id => COURTS.find(c => c.id === id) || {fr:id, ar:'', short:id};
+const STATUS = {cours:{fr:'En cours', ar:'جاري'}, juge:{fr:'Jugé', ar:'محكوم'}, appel:{fr:'En appel', ar:'في الإستئناف'}};
+const DOC_TYPES = {jugement:{fr:'Jugement', ar:'حكم'}, convocation:{fr:'Convocation', ar:'استدعاء'}, requete:{fr:'Requête', ar:'عريضة دعوى'}, pv:{fr:'PV de constat', ar:'محضر معاينة'}, autre:{fr:'Autre pièce', ar:'وثيقة'}};
+const H_STATUS = {prevue:{fr:'Prévue', ar:'مبرمجة', cls:'neutral'}, effectuee:{fr:'Effectuée', ar:'تمت', cls:'ok'}, reportee:{fr:'Reportée', ar:'تأجلت', cls:'warn'}, deliberee:{fr:'Mise en délibéré', ar:'حجزت للمفاوضة', cls:'appel'}};
+const GLOSSARY = [
+  ['Numéro d\'affaire / rôle','رقم القضية'], ['Tribunal de Première Instance','المحكمة الابتدائية'], ['Cour d\'Appel','محكمة الاستئناف'],
+  ['Tribunal de Canton','محكمة الناحية'], ['Report d\'audience','تأجيل الجلسة'], ['Jugement par défaut','حكم غيابي'], ['Copie exécutoire','نسخة تنفيذية']
+];
+const AR_PHRASES = ['تأجيل لتقديم الجواب','تأجيل للاطلاع والرد','تأجيل لاستدعاء الخصم','حجز القضية للمفاوضة والتصريح بالحكم','تأجيل لإدخال الغير'];
+
+/* ================= Données de démonstration ================= */
+function seed(){
+  const doc = (title, type, off, extra = {}) => ({id:uid(), title, type, ext:'pdf', kind:'scan', date:isoOff(off), storage:uid()+'.pdf', tr:{}, ...extra});
+  const D = (role, courtId, client, adverse, statut, lastOff, docs = []) => ({id:uid(), role, court:courtId, client, adverse, statut, last:isoOff(lastOff), docs});
+  const d1 = D('2026/14523','tpi-Tunis','Sté Carthage Logistique SARL','Atlas Transit SA','juge',-2,[
+    doc('Jugement du 24 septembre 2026','jugement',-2),
+    doc('Convocation audience','convocation',-29),
+    doc('Requête introductive','requete',-231),
+  ]);
+  const d2 = D('2026/08817','can-Ariana','Amira Trabelsi','Mounir Jaziri','cours',-5,[doc('Requête en référé','requete',-40)]);
+  const d3 = D('2025/31204','app-Sousse','Hédi Ben Salah','Sté Sahel Immobilier','appel',-9,[doc('Jugement de première instance','jugement',-120), doc('PV de constat d\'huissier','pv',-60)]);
+  const d4 = D('2025/22671','tpi-Sfax','Nour El Houda Mansouri','Karim Ayadi','juge',-34,[]);
+  const d5 = D('2026/05390','tpi-Nabeul','Sté Cap Bon Agrumes','Sté Méditerranée Emballages','cours',-1,[doc('Convocation','convocation',-15)]);
+  const d6 = D('2026/11048','can-La Marsa','Youssef Chaabane','Rim Ben Ammar','cours',-12,[]);
+  const d7 = D('2026/02716','tpi-Ben Arous','Sté Rades Métal SA','Ahmed Bouazizi','cours',-3,[]);
+
+  // Une traduction déjà validée, servie depuis le cache
+  const conv = d1.docs[1];
+  conv.tr.fr = {...aiContent(conv, d1, 'fr'), status:'validated_by_lawyer', edited:false, editedBy:null, at:isoOff(-28)};
+
+  const H = (d, off, time, salle, status = 'prevue', extra = {}) => ({id:uid(), dossierId:d.id, date:isoOff(off), time, salle, status, decision:'', note:'', dirty:false, ...extra});
+  const hearings = [
+    H(d1,-2,'09:30','Salle 3','effectuee',{decision:'حكمت المحكمة ابتدائيا حضوريا'}),
+    H(d2,0,'08:30','Salle 1'), H(d5,0,'09:30','Salle 2'), H(d7,0,'11:00','Salle 5'),
+    H(d3,1,'09:00','Salle d\'audience B'), H(d6,2,'10:00','Salle unique'),
+    H(d2,3,'08:30','Salle 1'), H(d5,6,'09:30','Salle 2'), H(d3,9,'09:00','Salle d\'audience B'), H(d7,13,'11:00','Salle 5'),
+  ];
+  return {dossiers:[d1,d5,d7,d2,d3,d6,d4], hearings, queue:[], cacheAt:new Date().toISOString()};
+}
+
+/* ================= Contenu IA simulé ================= */
+function originalHtml(doc, d){
+  const c = court(d.court);
+  if (doc.type === 'jugement' && d.role === '2026/14523') return `
+    <div class="hdr"><span>الجمهورية التونسية<br>وزارة العدل</span><span>المحكمة الابتدائية بتونس<br>الدائرة المدنية الخامسة</span></div>
+    <div class="ttl">حكم مدني عدد ${esc(d.role)}</div>
+    <p style="text-align:center">باسم الشعب التونسي</p>
+    <p>أصدرت المحكمة الابتدائية بتونس بجلستها العلنية المنعقدة بتاريخ 24 سبتمبر 2026 الحكم الآتي بين:</p>
+    <p><b>المدعية:</b> شركة قرطاج للوجستيك ش.ذ.م.م، نائبتها الأستاذة ليلى الحداد المحامية لدى التعقيب، من جهة،</p>
+    <p><b>والمدعى عليها:</b> شركة أطلس للعبور ش.خ.، من جهة أخرى.</p>
+    <p>وبعد الاطلاع على عريضة الدعوى المرسمة بكتابة المحكمة بتاريخ 12 فيفري 2026 والرامية إلى إلزام المدعى عليها بأداء مبلغ قدره 48.750,000 دينارا بعنوان معينات نقل غير مستخلصة.</p>
+    <p>وحيث ثبت للمحكمة من خلال الفواتير المظروفة بالملف أن الدين ثابت وحال الأداء.</p>
+    <p style="text-align:center;font-weight:600">ولهذه الأسباب</p>
+    <p>قضت المحكمة ابتدائيا حضوريا بقبول الدعوى شكلا وفي الأصل بإلزام المدعى عليها بأن تؤدي للمدعية مبلغ 48.750,000 دينارا أصلا و1.500,000 دينارا لقاء أتعاب التقاضي وأجرة المحاماة، وحمل المصاريف القانونية عليها، ورفض ما زاد على ذلك.</p>
+    <div class="seal">المحكمة<br>الابتدائية<br>بتونس</div><p style="height:70px"></p>`;
+  if (doc.type === 'convocation') return `
+    <div class="hdr"><span>الجمهورية التونسية<br>وزارة العدل</span><span>${esc(c.ar)}<br>كتابة المحكمة</span></div>
+    <div class="ttl">استدعاء للحضور بالجلسة</div>
+    <p><b>القضية عدد:</b> <span dir="ltr">${esc(d.role)}</span></p>
+    <p><b>بطلب من:</b> ${esc(d.client)}</p>
+    <p><b>ضد:</b> ${esc(d.adverse)}</p>
+    <p>يُستدعى الممثل القانوني للمطلوب للحضور بجلسة يوم 24 سبتمبر 2026 على الساعة التاسعة والنصف صباحا بقاعة الجلسات عدد 3، وذلك للنظر في القضية المذكورة أعلاه.</p>
+    <p>وفي صورة التخلف عن الحضور، يمكن للمحكمة أن تصدر حكمها غيابيا.</p>
+    <div class="seal">كتابة<br>المحكمة</div><p style="height:70px"></p>`;
+  const ty = DOC_TYPES[doc.type] || DOC_TYPES.autre;
+  return `
+    <div class="hdr"><span>الجمهورية التونسية</span><span>${esc(c.ar)}</span></div>
+    <div class="ttl">${esc(ty.ar)} — القضية عدد <span dir="ltr">${esc(d.role)}</span></div>
+    <p><b>الطالب:</b> ${esc(d.client)}</p>
+    <p><b>المطلوب:</b> ${esc(d.adverse)}</p>
+    <p>يتضمن هذا المستند عرضا للوقائع وطلبات الأطراف وقائمة في المؤيدات المظروفة بالملف، وذلك وفقا لأحكام مجلة المرافعات المدنية والتجارية.</p>
+    <p>وحيث يتمسك الطالب بطلباته الواردة بعريضة الدعوى ويطلب الحكم وفقها مع حمل المصاريف على المطلوب.</p>
+    <p style="color:#7a7466;font-size:.8rem">[ نموذج تجريبي للوثيقة الأصلية ]</p>`;
+}
+
+function aiContent(doc, d, lang){
+  const c = court(d.court), en = lang === 'en';
+  const P = (s, cls) => `<p${cls ? ` class="${cls}"` : ''}>${s}</p>`;
+  if (doc.type === 'jugement' && d.role === '2026/14523') {
+    return en ? {
+      summary:[
+        'Subject: claim for payment of TND 48,750.000 for unpaid transport charges (claim filed 12 February 2026).',
+        'Decision: contradictory first-instance judgment of 24 September 2026; the claim is admissible and well-founded.',
+        'Order: Atlas Transit SA must pay TND 48,750.000 in principal and TND 1,500.000 for legal costs and attorney fees.',
+        'Court costs borne by the defendant; all other claims dismissed.',
+        'Next step: request the enforceable copy (نسخة تنفيذية) to start enforcement.'],
+      full:[P('Republic of Tunisia — Ministry of Justice','c'),P('Court of First Instance of Tunis — 5th Civil Chamber','c'),P(`Civil judgment No. ${esc(d.role)}`,'c'),P('In the name of the Tunisian people,','c'),
+        P('The Court of First Instance of Tunis, sitting in public on 24 September 2026, delivered the following judgment between:'),
+        P('<b>Claimant:</b> Carthage Logistique SARL, represented by Maître Leïla Haddad, attorney before the Court of Cassation, on the one hand;'),
+        P('<b>Defendant:</b> Atlas Transit SA, on the other hand.'),
+        P('Having regard to the originating claim registered with the court registry on 12 February 2026, seeking an order against the defendant to pay TND 48,750.000 in unpaid transport charges;'),
+        P('Whereas the invoices filed in the record establish that the debt is certain and due;'),
+        P('<b>On these grounds,</b>','c'),
+        P('The Court, ruling at first instance and after hearing both parties, declares the claim admissible in form; on the merits, orders the defendant to pay the claimant TND 48,750.000 in principal and TND 1,500.000 for legal costs and attorney fees, orders it to bear the court costs, and dismisses the remainder of the claims.')].join('')
+    } : {
+      summary:[
+        'Objet : action en paiement de 48 750,000 DT au titre de frais de transport impayés (requête du 12 février 2026).',
+        'Décision : jugement contradictoire de première instance du 24 septembre 2026 ; demande recevable et fondée.',
+        'Condamnation : Atlas Transit SA doit payer 48 750,000 DT en principal et 1 500,000 DT au titre des frais de procédure et honoraires d\'avocat.',
+        'Dépens à la charge de la défenderesse ; surplus des demandes rejeté.',
+        'Étape suivante : demander la copie exécutoire (نسخة تنفيذية) pour engager l\'exécution.'],
+      full:[P('République Tunisienne — Ministère de la Justice','c'),P('Tribunal de Première Instance de Tunis — 5<sup>e</sup> chambre civile','c'),P(`Jugement civil n° ${esc(d.role)}`,'c'),P('Au nom du peuple tunisien,','c'),
+        P('Le Tribunal de Première Instance de Tunis, en son audience publique du 24 septembre 2026, a rendu le jugement suivant entre :'),
+        P('<b>Demanderesse :</b> Société Carthage Logistique SARL, représentée par Maître Leïla Haddad, avocate près la Cour de Cassation, d\'une part ;'),
+        P('<b>Défenderesse :</b> Société Atlas Transit SA, d\'autre part.'),
+        P('Vu la requête introductive d\'instance enregistrée au greffe le 12 février 2026, tendant à condamner la défenderesse au paiement de la somme de 48 750,000 dinars au titre de frais de transport impayés ;'),
+        P('Attendu qu\'il ressort des factures versées au dossier que la créance est certaine et exigible ;'),
+        P('<b>Par ces motifs,</b>','c'),
+        P('Le Tribunal, statuant en premier ressort et contradictoirement, déclare la demande recevable en la forme ; au fond, condamne la défenderesse à payer à la demanderesse la somme de 48 750,000 dinars en principal et 1 500,000 dinars au titre des frais de procédure et honoraires d\'avocat, met les dépens à sa charge et rejette le surplus des demandes.')].join('')
+    };
+  }
+  if (doc.type === 'convocation') {
+    return en ? {
+      summary:[`Subject: summons to appear in case No. ${d.role} before the ${c.fr.replace('Tribunal de Première Instance','Court of First Instance').replace('Tribunal de Canton','Cantonal Court').replace("Cour d'Appel",'Court of Appeal')}.`,
+        `Parties: ${d.client} (claimant) v. ${d.adverse}.`,'Key date: hearing on 24 September 2026 at 9:30 a.m., courtroom No. 3.',
+        'Warning: failure to appear may lead to a default judgment (حكم غيابي).'],
+      full:[P('Republic of Tunisia — Ministry of Justice','c'),P('Summons to appear at hearing','c'),P(`<b>Case No.:</b> ${esc(d.role)}`),P(`<b>At the request of:</b> ${esc(d.client)}`),P(`<b>Against:</b> ${esc(d.adverse)}`),
+        P('The legal representative of the respondent is summoned to appear at the hearing of 24 September 2026 at 9:30 a.m. in courtroom No. 3 for the examination of the above case.'),
+        P('Should the respondent fail to appear, the court may deliver a default judgment.')].join('')
+    } : {
+      summary:[`Objet : convocation à l'audience dans l'affaire n° ${d.role} devant le ${c.fr}.`,`Parties : ${d.client} (demandeur) c. ${d.adverse}.`,
+        'Date clé : audience du 24 septembre 2026 à 9 h 30, salle n° 3.','Avertissement : en cas d\'absence, le tribunal peut statuer par défaut (حكم غيابي).'],
+      full:[P('République Tunisienne — Ministère de la Justice','c'),P('Convocation à l\'audience','c'),P(`<b>Affaire n° :</b> ${esc(d.role)}`),P(`<b>À la requête de :</b> ${esc(d.client)}`),P(`<b>Contre :</b> ${esc(d.adverse)}`),
+        P('Le représentant légal de la partie défenderesse est convoqué à l\'audience du 24 septembre 2026 à 9 h 30, salle d\'audience n° 3, pour l\'examen de l\'affaire susmentionnée.'),
+        P('En cas de défaut de comparution, le tribunal pourra rendre un jugement par défaut.')].join('')
+    };
+  }
+  const ty = DOC_TYPES[doc.type] || DOC_TYPES.autre;
+  const uploaded = !!doc.uploaded;
+  return en ? {
+    summary:[`Nature: ${ty.fr === 'Requête' ? 'statement of claim' : ty.fr === 'PV de constat' ? 'bailiff\'s report' : 'court document'} in case No. ${d.role}.`,`Parties: ${d.client} v. ${d.adverse}.`,
+      'Content: statement of facts, the parties\' requests and the list of supporting exhibits.', uploaded ? 'Prototype: the real OCR + LLM pipeline will process the uploaded file on the .NET backend.' : 'No hearing date or court order detected in the document.'],
+    full:[P('Republic of Tunisia','c'),P(`${esc(ty.fr)} — Case No. ${esc(d.role)}`,'c'),P(`<b>Applicant:</b> ${esc(d.client)}`),P(`<b>Respondent:</b> ${esc(d.adverse)}`),
+      P('This document sets out the facts, the parties\' requests and the list of supporting exhibits filed in the record, in accordance with the Code of Civil and Commercial Procedure.'),
+      P('Whereas the applicant maintains the requests set out in the statement of claim and asks the court to rule accordingly, with costs borne by the respondent.')].join('')
+  } : {
+    summary:[`Nature : ${ty.fr.toLowerCase()} relative à l'affaire n° ${d.role} (${c.fr}).`,`Parties : ${d.client} c. ${d.adverse}.`,
+      'Contenu : exposé des faits, demandes des parties et liste des pièces justificatives.', uploaded ? 'Prototype : le vrai pipeline OCR + LLM traitera le fichier importé côté backend .NET.' : 'Aucune date d\'audience ni ordonnance détectée dans le document.'],
+    full:[P('République Tunisienne','c'),P(`${esc(ty.fr)} — Affaire n° ${esc(d.role)}`,'c'),P(`<b>Demandeur :</b> ${esc(d.client)}`),P(`<b>Défendeur :</b> ${esc(d.adverse)}`),
+      P('Le présent document expose les faits, les demandes des parties et la liste des pièces justificatives versées au dossier, conformément au Code de procédure civile et commerciale.'),
+      P('Attendu que le demandeur maintient les demandes formulées dans sa requête et sollicite qu\'il soit statué en ce sens, les dépens étant mis à la charge du défendeur.')].join('')
+  };
+}
+
+/* ================= État & persistance ================= */
+let state;
+function load(){
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(STORE) || 'null'); } catch (e) { saved = null; }
+  const data = saved && saved.v === 1 ? saved.data : seed();
+  state = {...data, lang: (saved && saved.lang) || 'fr', online: true, view:{name:'dossiers'}, filter:'all', q:'', agendaMode:'day', pane:'ai', aiTab:'summary', zoom:1, rot:0, pipelineToken:0};
+}
+let saveTimer;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(STORE, JSON.stringify({v:1, lang:state.lang, data:{dossiers:state.dossiers, hearings:state.hearings, queue:state.queue, cacheAt:state.cacheAt}})); }
+    catch (e) { /* stockage indisponible ou plein : le prototype continue en mémoire */ }
+  }, 250);
+}
+const dossier = id => state.dossiers.find(d => d.id === id);
+const liveDocs = d => d.docs.filter(x => !x.deleted);
+
+/* ================= Navigation ================= */
+function go(name, params = {}){
+  state.pipelineToken++;
+  state.view = {name, ...params};
+  if (name === 'traduction') { state.zoom = 1; state.rot = 0; state.aiTab = 'summary'; state.pane = 'ai'; }
+  render();
+  window.scrollTo({top:0});
+}
+function navItems(){
+  const n = state.queue.length;
+  return [
+    {k:'dossiers', icon:ICON.folder, label:t('dossiers'), match:['dossiers','nouveau','fiche','traduction']},
+    {k:'agenda', icon:ICON.cal, label:t('agenda'), match:['agenda','cr']},
+    {k:'synchro', icon:ICON.sync, label:t('sync'), match:['synchro'], badge:n},
+  ];
+}
+function renderNav(){
+  const items = navItems();
+  const html = items.map(i => `<button type="button" data-nav="${i.k}" ${i.match.includes(state.view.name) ? 'aria-current="page"' : ''}>${i.icon}<span>${esc(i.label)}</span>${i.badge ? `<span class="badge-n">${i.badge}</span>` : ''}</button>`).join('');
+  $('#tabbar').innerHTML = html;
+  $('#rail').innerHTML = html + `<div class="rail-foot">Prototype UI — Lot 01 Espace Avocat.<br>Données fictives, IA simulée.</div>`;
+  const net = $('#net');
+  net.className = 'net' + (state.online ? '' : ' off');
+  net.innerHTML = `<span class="dot"></span><span>${t(state.online ? 'online' : 'offline')}</span>${state.queue.length ? `<span class="q">${state.queue.length}</span>` : ''}`;
+  $('#langBtn').textContent = state.lang === 'ar' ? 'FR' : 'ع';
+  $$('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+}
+document.addEventListener('click', e => {
+  const nav = e.target.closest('[data-nav]');
+  if (nav) go(nav.dataset.nav);
+});
+$('#brand').addEventListener('click', e => { e.preventDefault(); go('dossiers'); });
+$('#langBtn').addEventListener('click', () => { state.lang = state.lang === 'ar' ? 'fr' : 'ar'; applyLang(); save(); render(); });
+function applyLang(){ document.documentElement.lang = state.lang; document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr'; }
+
+/* ================= Rendu ================= */
+function render(){
+  renderNav();
+  const v = state.view, root = $('#view');
+  const views = {dossiers:viewDossiers, nouveau:viewForm, fiche:viewFiche, traduction:viewTraduction, agenda:viewAgenda, cr:viewCR, synchro:viewSync};
+  (views[v.name] || viewDossiers)(root);
+}
+
+/* ---------- Écran A : Tableau de bord ---------- */
+function statusChip(s){ const m = {cours:'cours', juge:'juge', appel:'appel'}; return `<span class="chip ${m[s]}">${esc(t('st_' + s))}</span>`; }
+function hl(text, q){
+  const s = esc(text); if (!q) return s;
+  const i = text.toLowerCase().indexOf(q.toLowerCase()); if (i < 0) return s;
+  return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length));
+}
+function nextHearing(d){ return state.hearings.filter(h => h.dossierId === d.id && h.status === 'prevue' && daysFrom(h.date) >= 0).sort((a,b) => (a.date + a.time).localeCompare(b.date + b.time))[0]; }
+function viewDossiers(root){
+  const counts = {all:state.dossiers.length}; state.dossiers.forEach(d => counts[d.statut] = (counts[d.statut] || 0) + 1);
+  root.innerHTML = `
+    <div class="page-head"><div class="grow"><div class="eyebrow">Cabinet Haddad · ${state.dossiers.length} affaires</div><h1>${esc(t('dash'))}</h1></div>
+      <button class="btn primary" type="button" id="newBtn">${ICON.plus}${esc(t('newCase'))}</button></div>
+    <div class="toolbar">
+      <label class="search">${ICON.search}<input id="q" type="search" placeholder="${esc(t('searchPh'))}" value="${esc(state.q)}" autocomplete="off" aria-label="Recherche"><span class="perf" id="perf"></span></label>
+      <div class="filters" role="group" aria-label="Filtrer par statut">
+        ${['all','cours','juge','appel'].map(k => `<button type="button" data-filter="${k}" aria-pressed="${state.filter === k}">${esc(k === 'all' ? t('all') : t('st_' + k))} <span class="mono">${counts[k] || 0}</span></button>`).join('')}
+      </div>
+    </div>
+    <div id="results"></div>`;
+  $('#newBtn').onclick = () => go('nouveau');
+  const q = $('#q');
+  q.oninput = () => { state.q = q.value; renderResults(); };
+  $$('[data-filter]').forEach(b => b.onclick = () => { state.filter = b.dataset.filter; $$('[data-filter]').forEach(x => x.setAttribute('aria-pressed', x === b)); renderResults(); });
+  renderResults();
+}
+function renderResults(){
+  const t0 = performance.now();
+  const q = state.q.trim().toLowerCase();
+  const rows = state.dossiers.filter(d => (state.filter === 'all' || d.statut === state.filter) &&
+    (!q || [d.client, d.adverse, d.role, court(d.court).fr, court(d.court).short, court(d.court).ar].some(x => x.toLowerCase().includes(q))))
+    .sort((a, b) => b.last.localeCompare(a.last));
+  const qq = state.q.trim();
+  const el = $('#results');
+  if (!rows.length) { el.innerHTML = `<div class="empty card">Aucune affaire ne correspond à « ${esc(qq)} ».<br><button class="link" type="button" id="clearQ">Effacer la recherche</button></div>`; $('#clearQ').onclick = () => { state.q = ''; $('#q').value = ''; renderResults(); }; }
+  else el.innerHTML = `
+    <div class="only-desktop table-wrap"><table>
+      <thead><tr><th>N° Rôle</th><th>Client</th><th>Partie adverse</th><th>Tribunal</th><th>Dernière activité</th><th>Statut</th></tr></thead>
+      <tbody>${rows.map(d => `<tr class="row" data-open="${d.id}" tabindex="0"><td class="role">${hl(d.role, qq)}</td><td><b>${hl(d.client, qq)}</b></td><td>${hl(d.adverse, qq)}</td><td>${hl(court(d.court).short, qq)}</td><td class="mono small">${esc(fmtDate(d.last))}</td><td>${statusChip(d.statut)}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <div class="only-mobile list-cards">${rows.map(d => { const nh = nextHearing(d); return `
+      <button class="dcard" type="button" data-open="${d.id}">
+        <span class="top"><span class="role">${hl(d.role, qq)}</span>${statusChip(d.statut)}</span>
+        <span class="parties">${hl(d.client, qq)} <span class="muted">c.</span> ${hl(d.adverse, qq)}</span>
+        <span class="meta"><span>${hl(court(d.court).short, qq)}</span><span>Activité : ${esc(fmtDate(d.last, {day:'numeric', month:'short'}))}</span>${nh ? `<span style="color:var(--ink);font-weight:600">Audience ${esc(relDay(nh.date))} · ${esc(nh.time)}</span>` : ''}</span>
+      </button>`; }).join('')}</div>`;
+  $$('[data-open]', el).forEach(r => { r.onclick = () => go('fiche', {id:r.dataset.open}); r.onkeydown = e => { if (e.key === 'Enter') go('fiche', {id:r.dataset.open}); }; });
+  const p = $('#perf'); if (p) p.textContent = q ? `${rows.length} · ${(performance.now() - t0).toFixed(1)} ms` : '';
+}
+
+/* ---------- Écran B : Formulaire dossier ---------- */
+function viewForm(root){
+  const editing = state.view.id ? dossier(state.view.id) : null;
+  const d = editing || {role:'', court:'', client:'', adverse:'', statut:'cours'};
+  const opt = kind => COURTS.filter(c => c.kind === kind).map(c => `<option value="${esc(c.id)}" ${d.court === c.id ? 'selected' : ''}>${esc(c.fr)} — ${esc(c.ar)}</option>`).join('');
+  root.innerHTML = `
+    <button class="back" type="button" id="back">${ICON.back}${esc(t('back'))}</button>
+    <div class="page-head"><div class="grow"><div class="eyebrow">${editing ? 'Modifier la fiche' : 'Création de fiche'}</div><h1>${editing ? esc(d.role) : 'Nouvelle affaire'} <span class="ar muted" style="font-size:1.1rem">${editing ? 'تعديل القضية' : 'قضية جديدة'}</span></h1></div></div>
+    <form class="form card" id="f" novalidate style="padding:20px">
+      <div class="field">
+        <label for="role">Numéro d'affaire / Rôle <span class="ar">رقم القضية</span></label>
+        <input class="input mono" id="role" name="role" required placeholder="2026/14523" value="${esc(d.role)}" inputmode="numeric" autocomplete="off">
+        <span class="hint" id="roleHint">Format recommandé : Année/Numéro (ex. 2026/14523).</span>
+      </div>
+      <div class="field">
+        <label for="court">Tribunal concerné <span class="ar">المحكمة</span></label>
+        <select class="input" id="court" name="court" required>
+          <option value="">Choisir une juridiction…</option>
+          <optgroup label="Tribunaux de Première Instance — المحاكم الابتدائية">${opt('tpi')}</optgroup>
+          <optgroup label="Tribunaux de Canton — محاكم الناحية">${opt('canton')}</optgroup>
+          <optgroup label="Cours d'Appel — محاكم الاستئناف">${opt('appel')}</optgroup>
+        </select>
+        <span class="hint" id="courtHint"></span>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label for="client">Nom du client <span class="ar">اسم الموكل</span></label>
+          <input class="input" id="client" name="client" required maxlength="100" value="${esc(d.client)}" placeholder="Personne physique ou morale">
+          <span class="hint" id="clientHint"></span>
+        </div>
+        <div class="field">
+          <label for="adverse">Partie adverse <span class="ar">الخصم</span></label>
+          <input class="input" id="adverse" name="adverse" required maxlength="100" value="${esc(d.adverse)}" placeholder="Nom de l'opposant ou de son entreprise">
+          <span class="hint" id="adverseHint"></span>
+        </div>
+      </div>
+      <div class="field">
+        <span class="label" id="stLbl">Statut de l'affaire <span class="ar">حالة القضية</span></span>
+        <div class="seg" role="radiogroup" aria-labelledby="stLbl">
+          ${Object.entries(STATUS).map(([k, s]) => `<label><input type="radio" name="statut" value="${k}" ${d.statut === k ? 'checked' : ''}><span>${esc(s.fr)}</span><span class="ar">${esc(s.ar)}</span></label>`).join('')}
+        </div>
+      </div>
+      <div class="form-actions"><button class="btn primary" type="submit">${editing ? 'Enregistrer les modifications' : 'Créer le dossier'}</button><button class="btn" type="button" id="cancel">Annuler</button></div>
+    </form>`;
+  const back = () => editing ? go('fiche', {id:editing.id}) : go('dossiers');
+  $('#back').onclick = back; $('#cancel').onclick = back;
+  const role = $('#role');
+  role.oninput = () => {
+    const ok = /^\d{4}\/\d{1,6}$/.test(role.value.trim());
+    const h = $('#roleHint');
+    h.className = 'hint' + (role.value && !ok ? ' warn' : '');
+    h.textContent = role.value && !ok ? 'Format inhabituel : le format recommandé est Année/Numéro (ex. 2026/14523). Vous pouvez tout de même enregistrer.' : 'Format recommandé : Année/Numéro (ex. 2026/14523).';
+  };
+  $('#f').onsubmit = e => {
+    e.preventDefault();
+    const f = e.target, vals = {role:f.role.value.trim(), court:f.court.value, client:f.client.value.trim(), adverse:f.adverse.value.trim(), statut:f.statut.value};
+    let bad = null;
+    const setErr = (k, msg) => { const inp = f[k]; inp.setAttribute('aria-invalid', msg ? 'true' : 'false'); const h = $('#' + k + 'Hint'); if (h) { h.className = 'hint' + (msg ? ' err' : ''); if (msg || k !== 'role') h.textContent = msg || ''; } if (msg && !bad) bad = inp; };
+    setErr('role', vals.role ? '' : 'Le numéro de rôle est obligatoire.');
+    setErr('court', vals.court ? '' : 'Choisissez la juridiction.');
+    setErr('client', vals.client ? '' : 'Le nom du client est obligatoire.');
+    setErr('adverse', vals.adverse ? '' : 'La partie adverse est obligatoire.');
+    const dup = state.dossiers.find(x => x.role === vals.role && x.court === vals.court && (!editing || x.id !== editing.id));
+    if (dup) setErr('role', `Ce numéro de rôle existe déjà au ${court(vals.court).short} (client : ${dup.client}).`);
+    if (bad) { bad.focus(); return; }
+    if (vals.role && !/^\d{4}\/\d{1,6}$/.test(vals.role)) role.oninput();
+    if (editing) { Object.assign(editing, vals, {last:isoOff(0)}); toast('Fiche mise à jour.'); save(); go('fiche', {id:editing.id}); }
+    else { const nd = {id:uid(), ...vals, last:isoOff(0), docs:[]}; state.dossiers.unshift(nd); toast(`Dossier ${nd.role} créé. Ajoutez maintenant ses pièces.`, 'ok'); save(); go('fiche', {id:nd.id}); }
+  };
+}
+
+/* ---------- Écran C : Fiche dossier & GED ---------- */
+function trChips(doc){
+  return ['fr','en'].map(l => { const x = doc.tr[l]; if (!x) return ''; const v = x.status === 'validated_by_lawyer';
+    return `<span class="chip ${v ? 'ok' : 'warn'}">${l.toUpperCase()} · ${v ? 'validée' : 'brouillon'}</span>`; }).join('');
+}
+function viewFiche(root){
+  const d = dossier(state.view.id); if (!d) return go('dossiers');
+  const c = court(d.court);
+  const hs = state.hearings.filter(h => h.dossierId === d.id).sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+  const docs = liveDocs(d).sort((a, b) => b.date.localeCompare(a.date));
+  root.innerHTML = `
+    <button class="back" type="button" data-nav="dossiers">${ICON.back}${esc(t('dossiers'))}</button>
+    <section class="case-head">
+      <div class="row1"><span class="rolebig">${esc(d.role)}</span>${statusChip(d.statut)}<span style="margin-inline-start:auto"></span><button class="btn sm" type="button" id="edit">Modifier</button></div>
+      <h1 style="font-size:1.35rem">${esc(d.client)} <span class="muted" style="font-weight:400">c.</span> ${esc(d.adverse)}</h1>
+      <div class="facts">
+        <div class="fact"><span class="eyebrow">Juridiction</span><span class="v">${esc(c.fr)}</span><div class="ar muted small">${esc(c.ar)}</div></div>
+        <div class="fact"><span class="eyebrow">Client · اسم الموكل</span><span class="v">${esc(d.client)}</span></div>
+        <div class="fact"><span class="eyebrow">Partie adverse · الخصم</span><span class="v">${esc(d.adverse)}</span></div>
+        <div class="fact"><span class="eyebrow">Dernière activité</span><span class="v mono">${esc(fmtDate(d.last))}</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Numériser une pièce</h2><span class="muted small">PDF, JPG, PNG · 10 Mo max · rattachée à ${esc(d.role)}</span></div>
+      <div class="channels">
+        <div class="drop" id="drop" role="button" tabindex="0" aria-label="Importer un scan">${ICON.upload}<b>Glissez un scan ici</b><span class="muted small">ou cliquez pour parcourir vos fichiers</span></div>
+        <button class="camera" type="button" id="cam">${ICON.camera}<b>Prendre une photo</b><span class="small">Recadrage auto + filtre OCR arabe</span></button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Pièces du dossier</h2><span class="chip neutral">${docs.length}</span></div>
+      <div class="pieces">${docs.length ? docs.map(x => `
+        <div class="piece">
+          <div class="thumb">${x.thumb ? `<img src="${x.thumb}" alt="">` : esc(x.ext)}</div>
+          <div style="min-width:0"><div class="t">${esc(x.title)}</div>
+            <div class="m"><span>${esc((DOC_TYPES[x.type] || DOC_TYPES.autre).fr)}</span><span class="mono">${esc(fmtDate(x.date))}</span><span>${x.kind === 'photo' ? 'Photo mobile' : 'Scan'}</span>${trChips(x)}</div></div>
+          <div class="acts">
+            <button class="btn sm" type="button" data-view="${x.id}">Visualiser</button>
+            <button class="btn sm primary" type="button" data-tr="${x.id}">Traduire via IA</button>
+            <button class="btn sm danger" type="button" data-del="${x.id}">Supprimer</button>
+          </div>
+        </div>`).join('') : `<div class="empty card">Aucune pièce pour l'instant. Importez un scan ou prenez une photo du document papier.</div>`}</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Audiences</h2><button class="btn sm" type="button" id="addH">${ICON.plus}Planifier</button></div>
+      <div class="pieces">${hs.length ? hs.map(hearingCard).join('') : `<div class="empty card">Aucune audience planifiée.</div>`}</div>
+    </section>`;
+  $('#edit').onclick = () => go('nouveau', {id:d.id});
+  const drop = $('#drop');
+  drop.onclick = () => { $('#fileScan').value = ''; $('#fileScan').click(); };
+  drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); drop.click(); } };
+  drop.ondragover = e => { e.preventDefault(); drop.classList.add('over'); };
+  drop.ondragleave = () => drop.classList.remove('over');
+  drop.ondrop = e => { e.preventDefault(); drop.classList.remove('over'); const f = e.dataTransfer.files[0]; if (f) startUpload(f, 'scan', d); };
+  $('#fileScan').onchange = e => { const f = e.target.files[0]; if (f) startUpload(f, 'scan', d); };
+  $('#cam').onclick = () => { $('#filePhoto').value = ''; $('#filePhoto').click(); };
+  $('#filePhoto').onchange = e => { const f = e.target.files[0]; if (f) startUpload(f, 'photo', d); };
+  $$('[data-view]').forEach(b => b.onclick = () => viewerModal(d, d.docs.find(x => x.id === b.dataset.view)));
+  $$('[data-tr]').forEach(b => b.onclick = () => langModal(d, d.docs.find(x => x.id === b.dataset.tr)));
+  $$('[data-del]').forEach(b => b.onclick = () => {
+    const x = d.docs.find(y => y.id === b.dataset.del);
+    confirmModal('Supprimer cette pièce ?', `« ${esc(x.title)} » sera retirée du dossier ${esc(d.role)} ainsi que ses traductions. Suppression logique : la pièce reste restaurable par l'administrateur du cabinet.`, 'Supprimer', () => {
+      x.deleted = true; x.deletedAt = new Date().toISOString(); x.deletedBy = LAWYER; save(); toast('Pièce supprimée.'); render();
+    }, true);
+  });
+  $('#addH').onclick = () => planModal(d);
+  bindHearingCards(root);
+}
+
+/* Upload : validation, assainissement, filtre OCR */
+const ALLOWED = ['pdf','jpg','jpeg','png'];
+function sanitize(name){
+  const base = name.replace(/\.[^.]+$/, '');
+  return base.normalize('NFKC').replace(/[^\p{L}\p{N}\-_ ]+/gu, ' ').replace(/\s+/g, ' ').trim().slice(0, 80) || 'Piece';
+}
+function startUpload(file, kind, d){
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  const isImg = file.type.startsWith('image/');
+  if (!ALLOWED.includes(ext) && !(kind === 'photo' && isImg)) return toast(`Format .${ext || '?'} refusé. Formats acceptés : PDF, JPG, JPEG, PNG.`, 'warn');
+  if (file.size > 10 * 1024 * 1024) return toast(`Fichier trop lourd (${(file.size / 1048576).toFixed(1)} Mo). Limite : 10 Mo.`, 'warn');
+  const finalExt = ALLOWED.includes(ext) ? ext : 'jpg';
+  if (!isImg) return uploadModal({file, kind, d, ext:finalExt, img:null});
+  const url = URL.createObjectURL(file);
+  const im = new Image();
+  im.onload = () => { uploadModal({file, kind, d, ext:finalExt, img:im}); };
+  im.onerror = () => toast('Image illisible. Réessayez avec un autre fichier.', 'warn');
+  im.src = url;
+}
+// RG-DOS-03 : niveaux de gris + normalisation du contraste (étirement d'histogramme)
+function processImage(img, crop, filter){
+  const max = 1100;
+  const sx = crop ? img.naturalWidth * .06 : 0, sy = crop ? img.naturalHeight * .06 : 0;
+  const sw = img.naturalWidth - 2 * sx, sh = img.naturalHeight - 2 * sy;
+  const k = Math.min(1, max / Math.max(sw, sh));
+  const cv = document.createElement('canvas'); cv.width = Math.round(sw * k); cv.height = Math.round(sh * k);
+  const ctx = cv.getContext('2d'); ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
+  if (filter) {
+    const id = ctx.getImageData(0, 0, cv.width, cv.height), p = id.data; let lo = 255, hi = 0;
+    const g = new Uint8ClampedArray(p.length / 4);
+    for (let i = 0, j = 0; i < p.length; i += 4, j++) { const v = .299 * p[i] + .587 * p[i+1] + .114 * p[i+2]; g[j] = v; }
+    const hist = new Uint32Array(256); g.forEach(v => hist[v]++);
+    const cut = g.length * .01; let acc = 0;
+    for (let v = 0; v < 256; v++) { acc += hist[v]; if (acc > cut) { lo = v; break; } }
+    acc = 0; for (let v = 255; v >= 0; v--) { acc += hist[v]; if (acc > cut) { hi = v; break; } }
+    const span = Math.max(1, hi - lo);
+    for (let i = 0, j = 0; i < p.length; i += 4, j++) { const v = (g[j] - lo) * 255 / span; p[i] = p[i+1] = p[i+2] = v; }
+    ctx.putImageData(id, 0, 0);
+  }
+  return cv;
+}
+function uploadModal({file, kind, d, ext, img}){
+  const storage = uid() + '.' + ext;
+  const clean = sanitize(file.name);
+  const isPhoto = kind === 'photo';
+  openModal(`
+    <div class="modal-head"><div><div class="eyebrow">${isPhoto ? 'Canal 2 · Caméra smartphone' : 'Canal 1 · Upload classique'}</div><h2>Archiver la pièce</h2></div><button class="iconbtn" type="button" data-close>Fermer</button></div>
+    ${img ? `<div class="crop" id="cropBox"><canvas id="pv"></canvas>${isPhoto ? '<div class="frame" id="frame"><i></i><i></i><i></i><i></i></div>' : ''}</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        ${isPhoto ? `<label class="toggle-row"><input type="checkbox" id="optCrop" checked> Bords détectés : rogner</label>` : ''}
+        <label class="toggle-row"><input type="checkbox" id="optFilt" ${isPhoto ? 'checked' : ''}> Filtre OCR (gris + contraste)</label>
+      </div>` : `<div class="readonly">${ICON.upload.replace('<svg', '<svg width="18" height="18"')} <b>${esc(file.name)}</b><span class="muted">${(file.size / 1024).toFixed(0)} Ko</span></div>`}
+    <div class="field"><label for="upTitle">Titre de la pièce</label><input class="input" id="upTitle" value="${esc(clean)}" maxlength="120"></div>
+    <div class="field"><label for="upType">Type de pièce</label><select class="input" id="upType">${Object.entries(DOC_TYPES).map(([k, v]) => `<option value="${k}">${esc(v.fr)} — ${esc(v.ar)}</option>`).join('')}</select></div>
+    <div class="field"><span class="label">Dossier de rattachement <span class="muted small" style="font-weight:500">non modifiable · RG-DOS-01</span></span>
+      <div class="readonly">${ICON.lock}<span class="role">${esc(d.role)}</span><span>${esc(d.client)} c. ${esc(d.adverse)}</span></div></div>
+    <div class="demo-note">Nom de stockage généré : <span class="mono">${esc(storage)}</span></div>
+    <div class="form-actions"><button class="btn primary" type="button" id="doUp">Archiver dans ${esc(d.role)}</button><button class="btn" type="button" data-close>Annuler</button></div>`, 'wide');
+  const draw = () => {
+    if (!img) return;
+    const crop = isPhoto && $('#optCrop').checked, filt = $('#optFilt').checked;
+    const cv = processImage(img, false, filt);
+    const pv = $('#pv'); pv.width = cv.width; pv.height = cv.height; pv.getContext('2d').drawImage(cv, 0, 0);
+    if ($('#frame')) $('#frame').hidden = !crop;
+  };
+  if (img) { draw(); $('#optFilt').onchange = draw; if (isPhoto) $('#optCrop').onchange = draw; }
+  $('#doUp').onclick = () => {
+    const title = $('#upTitle').value.trim() || clean;
+    let thumb = null;
+    if (img) {
+      const cv = processImage(img, isPhoto && $('#optCrop').checked, $('#optFilt').checked);
+      try { thumb = cv.toDataURL('image/jpeg', .72); } catch (e) { thumb = null; }
+    }
+    const doc = {id:uid(), title, type:$('#upType').value, ext, kind, date:isoOff(0), storage, tr:{}, thumb, uploaded:true};
+    d.docs.unshift(doc); d.last = isoOff(0);
+    save(); closeModal(); toast(`Pièce archivée dans ${d.role}.`, 'ok'); render();
+  };
+}
+
+function viewerModal(d, doc){
+  openModal(`<div class="modal-head"><div><div class="eyebrow">${esc(d.role)} · ${esc(fmtDate(doc.date))}</div><h2>${esc(doc.title)}</h2></div><button class="iconbtn" type="button" data-close>Fermer</button></div>
+    <div class="viewport" style="max-height:65vh;border-radius:8px"><div class="paper-wrap">${paperHtml(d, doc)}</div></div>
+    <div class="form-actions"><button class="btn primary" type="button" id="vTr">Traduire via IA</button></div>`, 'wide');
+  $('#vTr').onclick = () => { closeModal(); langModal(d, doc); };
+}
+function paperHtml(d, doc){
+  return doc.thumb ? `<div class="paper img"><img src="${doc.thumb}" alt="${esc(doc.title)}"></div>` : `<div class="paper">${originalHtml(doc, d)}</div>`;
+}
+function langModal(d, doc){
+  const row = (l, name, sub) => { const x = doc.tr[l];
+    return `<button class="lang-opt" type="button" data-lang="${l}"><span class="code">${l.toUpperCase()}</span><span class="grow"><b>${name}</b><br><span class="muted small">${sub}</span></span>${x ? `<span class="chip ok">En cache</span>` : `<span class="chip line">OCR + LLM · 4-8 s</span>`}</button>`; };
+  openModal(`<div class="modal-head"><div><div class="eyebrow">${esc(doc.title)}</div><h2>Langue cible</h2></div><button class="iconbtn" type="button" data-close>Fermer</button></div>
+    <div class="lang-opts">${row('fr', 'Français', 'Résumé exécutif + traduction intégrale')}${row('en', 'English', 'Executive summary + full translation')}</div>
+    <div class="demo-note">Source : arabe juridique (OCR). Une traduction déjà générée est servie depuis la base, sans nouvel appel IA (RG-TRAD-01).</div>`);
+  $$('[data-lang]').forEach(b => b.onclick = () => { closeModal(); go('traduction', {id:d.id, doc:doc.id, lang:b.dataset.lang}); });
+}
+function planModal(d){
+  openModal(`<div class="modal-head"><div><div class="eyebrow">${esc(d.role)}</div><h2>Planifier une audience</h2></div><button class="iconbtn" type="button" data-close>Fermer</button></div>
+    <div class="grid2"><div class="field"><label for="pd">Date</label><input class="input" type="date" id="pd" min="${isoOff(0)}" value="${isoOff(7)}"></div>
+    <div class="field"><label for="pt">Heure</label><input class="input" type="time" id="pt" value="09:00"></div></div>
+    <div class="field"><label for="ps">Salle</label><input class="input" id="ps" value="Salle 1"></div>
+    <div class="demo-note">Le client recevra automatiquement un SMS à J-3 et une notification à J-1.</div>
+    <div class="form-actions"><button class="btn primary" type="button" id="pOk">Ajouter à l'agenda</button></div>`);
+  $('#pOk').onclick = () => {
+    const date = $('#pd').value; if (!date) return $('#pd').focus();
+    state.hearings.push({id:uid(), dossierId:d.id, date, time:$('#pt').value || '09:00', salle:$('#ps').value.trim() || '—', status:'prevue', decision:'', note:'', dirty:false});
+    save(); closeModal(); toast(`Audience ajoutée le ${fmtDate(date)}.`, 'ok'); render();
+  };
+}
+
+/* ---------- Écran scindé : traduction IA ---------- */
+function viewTraduction(root){
+  const d = dossier(state.view.id), doc = d && d.docs.find(x => x.id === state.view.doc);
+  if (!doc || doc.deleted) return go('dossiers');
+  const lang = state.view.lang;
+  root.innerHTML = `
+    <button class="back" type="button" id="back">${ICON.back}<span class="mono">${esc(d.role)}</span></button>
+    <div class="tr-head">
+      <div class="grow"><div class="eyebrow">${esc((DOC_TYPES[doc.type] || DOC_TYPES.autre).fr)} · arabe → ${lang === 'fr' ? 'français' : 'anglais'}</div><div class="tr-title">${esc(doc.title)}</div></div>
+      <div class="langsel" role="group" aria-label="Langue cible">${['fr','en'].map(l => `<button type="button" data-l="${l}" aria-pressed="${l === lang}">${l === 'fr' ? 'Français' : 'English'}</button>`).join('')}</div>
+    </div>
+    <div class="paneswitch" role="group" aria-label="Panneau affiché"><button type="button" data-p="original" aria-pressed="${state.pane === 'original'}">Document original</button><button type="button" data-p="ai" aria-pressed="${state.pane === 'ai'}">Assistant IA</button></div>
+    <div class="split" id="split" data-pane="${state.pane}">
+      <section class="pane pane-orig" aria-label="Document original">
+        <div class="pane-bar"><span class="label">Original <span class="ar muted">الأصل</span></span>
+          <button class="vbtn" type="button" id="zo" aria-label="Zoom arrière">−</button><span class="zoomv" id="zv"></span><button class="vbtn" type="button" id="zi" aria-label="Zoom avant">+</button>
+          <button class="vbtn" type="button" id="rot" aria-label="Rotation">${ICON.rotate}</button></div>
+        <div class="viewport"><div class="paper-wrap" id="pw">${paperHtml(d, doc)}</div></div>
+      </section>
+      <section class="pane pane-ai" aria-label="Assistant IA" id="aiPane"></section>
+    </div>
+    <div class="actionbar" id="ab"></div>`;
+  $('#back').onclick = () => go('fiche', {id:d.id});
+  $$('[data-l]').forEach(b => b.onclick = () => { if (b.dataset.l !== lang) go('traduction', {id:d.id, doc:doc.id, lang:b.dataset.l}); });
+  $$('[data-p]').forEach(b => b.onclick = () => { state.pane = b.dataset.p; $('#split').dataset.pane = state.pane; $$('[data-p]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  const applyView = () => { $('#pw').style.transform = `rotate(${state.rot}deg) scale(${state.zoom})`; $('#zv').textContent = Math.round(state.zoom * 100) + ' %'; };
+  $('#zi').onclick = () => { state.zoom = Math.min(2.5, +(state.zoom + .25).toFixed(2)); applyView(); };
+  $('#zo').onclick = () => { state.zoom = Math.max(.5, +(state.zoom - .25).toFixed(2)); applyView(); };
+  $('#rot').onclick = () => { state.rot = (state.rot + 90) % 360; applyView(); };
+  applyView();
+  // RG-TRAD-01 : vérification du cache avant tout appel IA
+  const t0 = performance.now();
+  if (doc.tr[lang]) { renderAI(d, doc, lang, {cached:true, ms:Math.max(1, Math.round(performance.now() - t0 + 8))}); }
+  else runPipeline(d, doc, lang, false);
+}
+function runPipeline(d, doc, lang, regen){
+  const token = ++state.pipelineToken;
+  const pane = $('#aiPane'), ab = $('#ab');
+  const steps = [
+    {k:'cache', label: regen ? 'Cache ignoré (régénération)' : 'Vérification du cache BDD', ms:180},
+    {k:'ocr', label:'Extraction OCR arabe', ms:1500},
+    {k:'llm', label:`Traduction et résumé (${lang === 'fr' ? 'français' : 'anglais'})`, ms:2300},
+    {k:'db', label:'Sauvegarde · statut brouillon', ms:350},
+  ];
+  pane.innerHTML = `<div class="pane-bar"><span class="label">Assistant IA</span><span class="chip line">Traitement en cours</span></div>
+    <div class="pipeline"><div class="bar"><i id="pbar"></i></div>${steps.map((s, i) => `<div class="step" id="st${i}"><span class="ic"></span><span>${esc(s.label)}</span><span class="ms"></span></div>`).join('')}
+    <div class="demo-note">Simulation du pipeline. En production : Cloud Vision (OCR) puis LLM, appelés par le backend .NET.</div></div>`;
+  ab.innerHTML = `<div class="grow"><span class="chip line">En attente du résultat</span></div><button class="btn" type="button" disabled>Régénérer</button><button class="btn primary" type="button" disabled>Publier pour le client</button>`;
+  const total = steps.reduce((a, s) => a + s.ms, 0); let elapsed = 0, i = 0;
+  const next = () => {
+    if (token !== state.pipelineToken) return;
+    if (i > 0) { const p = $('#st' + (i - 1)); p.className = 'step done' + (regen && i === 1 ? ' skip' : ''); p.querySelector('.ms').textContent = steps[i - 1].ms + ' ms'; }
+    if (i === steps.length) {
+      doc.tr[lang] = {...aiContent(doc, d, lang), status:'draft', edited:false, editedBy:null, at:isoOff(0)};
+      d.last = isoOff(0); save();
+      return setTimeout(() => token === state.pipelineToken && renderAI(d, doc, lang, {cached:false, ms:total}), 250);
+    }
+    $('#st' + i).className = 'step run';
+    elapsed += steps[i].ms; $('#pbar').style.width = (elapsed / total * 100) + '%';
+    setTimeout(next, steps[i++].ms);
+  };
+  next();
+}
+function renderAI(d, doc, lang, info){
+  const tr = doc.tr[lang];
+  const pane = $('#aiPane');
+  pane.innerHTML = `
+    <div class="ai-tabs" role="tablist">
+      <button type="button" role="tab" data-tab="summary" aria-selected="${state.aiTab === 'summary'}">Résumé exécutif</button>
+      <button type="button" role="tab" data-tab="full" aria-selected="${state.aiTab === 'full'}">Traduction intégrale</button>
+    </div>
+    <div class="ai-body">
+      <div class="ai-meta">${info.cached ? `<span class="chip ok">Chargé depuis la base · ${info.ms} ms</span>` : `<span class="chip neutral">Généré à l'instant · ${(info.ms / 1000).toFixed(1)} s</span>`}<span class="chip line">${lang.toUpperCase()}</span></div>
+      <div id="tabSummary" ${state.aiTab === 'summary' ? '' : 'hidden'}>
+        <p class="muted small" style="margin:0 0 10px">Cliquez sur un point pour le corriger.</p>
+        <ul class="summary">${tr.summary.map((s, i) => `<li contenteditable="true" spellcheck="true" data-i="${i}">${esc(s)}</li>`).join('')}</ul>
+      </div>
+      <div id="tabFull" ${state.aiTab === 'full' ? '' : 'hidden'}>
+        <div class="rte-bar" role="toolbar" aria-label="Mise en forme">
+          <button class="vbtn" type="button" data-cmd="bold" aria-label="Gras"><b>G</b></button>
+          <button class="vbtn" type="button" data-cmd="italic" aria-label="Italique"><i>I</i></button>
+          <button class="vbtn" type="button" data-cmd="underline" aria-label="Souligné"><u>S</u></button>
+          <span class="sep"></span>
+          <button class="vbtn" type="button" data-cmd="undo" aria-label="Annuler">↶</button>
+        </div>
+        <div class="gloss"><span class="muted">Glossaire certifié :</span>${GLOSSARY.map(([fr, ar]) => `<button type="button" data-term="${esc(fr)}" title="Insérer « ${esc(fr)} »">${esc(fr)}<span class="ar">${esc(ar)}</span></button>`).join('')}</div>
+        <div class="rte" id="rte" contenteditable="true" spellcheck="true" lang="${lang}">${tr.full}</div>
+      </div>
+    </div>`;
+  $$('[data-tab]', pane).forEach(b => b.onclick = () => { state.aiTab = b.dataset.tab; $$('[data-tab]', pane).forEach(x => x.setAttribute('aria-selected', x === b)); $('#tabSummary').hidden = state.aiTab !== 'summary'; $('#tabFull').hidden = state.aiTab !== 'full'; });
+  $$('.summary li', pane).forEach(li => {
+    li.oninput = () => { tr.summary[+li.dataset.i] = li.textContent; markEdited(d, doc, lang); };
+    li.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); li.blur(); } };
+  });
+  const rte = $('#rte');
+  rte.oninput = () => { tr.full = rte.innerHTML; markEdited(d, doc, lang); };
+  $$('[data-cmd]', pane).forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { rte.focus(); document.execCommand(b.dataset.cmd); tr.full = rte.innerHTML; if (b.dataset.cmd !== 'undo') markEdited(d, doc, lang); }; });
+  $$('[data-term]', pane).forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || !rte.contains(sel.anchorNode)) { rte.focus(); const r = document.createRange(); r.selectNodeContents(rte); r.collapse(false); sel.removeAllRanges(); sel.addRange(r); }
+    document.execCommand('insertText', false, b.dataset.term); tr.full = rte.innerHTML; markEdited(d, doc, lang); }; });
+  renderActionBar(d, doc, lang);
+}
+function markEdited(d, doc, lang){
+  const tr = doc.tr[lang]; let changed = false;
+  if (!tr.edited) { tr.edited = true; tr.editedBy = LAWYER; changed = true; }
+  if (tr.status === 'validated_by_lawyer') { tr.status = 'draft'; changed = true; toast('Version modifiée après publication : elle repasse en brouillon et disparaît de l\'espace client jusqu\'à nouvelle validation.', 'warn'); }
+  save();
+  if (changed) renderActionBar(d, doc, lang);
+}
+function renderActionBar(d, doc, lang){
+  const tr = doc.tr[lang], v = tr.status === 'validated_by_lawyer';
+  $('#ab').innerHTML = `
+    <div class="grow">
+      ${tr.edited ? `<span class="chip appel">Modifié par ${esc(tr.editedBy || LAWYER)}</span>` : `<span class="chip neutral">Généré par l'IA</span>`}
+      ${v ? `<span class="chip ok">Visible par le client</span>` : `<span class="chip warn">${ICON.lock} Brouillon · invisible pour le client</span>`}
+    </div>
+    <button class="btn" type="button" id="regen">Régénérer</button>
+    <button class="btn ${v ? '' : 'ok'}" type="button" id="pub" ${v ? 'disabled' : ''}>${v ? 'Publiée' : 'Publier pour le client'}</button>`;
+  $('#regen').onclick = () => confirmModal('Régénérer la traduction ?', 'Le pipeline OCR + IA sera relancé sans passer par le cache. La version actuelle, y compris vos corrections, sera écrasée.', 'Régénérer', () => { delete doc.tr[lang]; save(); runPipeline(d, doc, lang, true); }, true);
+  $('#pub').onclick = () => { tr.status = 'validated_by_lawyer'; tr.validatedAt = new Date().toISOString(); d.last = isoOff(0); save(); renderActionBar(d, doc, lang); toast(`Publié : le résumé et la traduction (${lang.toUpperCase()}) sont visibles dans l'espace de ${d.client}.`, 'ok'); };
+}
+
+/* ---------- Agenda ---------- */
+function reminders(h){
+  if (h.status !== 'prevue') return '';
+  const n = daysFrom(h.date); if (n < 0) return '';
+  const s3 = n <= 3, s1 = n <= 1;
+  return `<span class="chip ${s3 ? 'ok' : 'line'}">SMS J-3 · ${s3 ? 'envoyé' : 'planifié'}</span><span class="chip ${s1 ? 'ok' : 'line'}">Push J-1 · ${s1 ? 'envoyé' : 'planifié'}</span>`;
+}
+function hearingCard(h){
+  const d = dossier(h.dossierId); if (!d) return '';
+  const st = H_STATUS[h.status];
+  return `<button class="hcard ${h.dirty ? 'dirty' : ''} ${h.status !== 'prevue' ? 'done' : ''}" type="button" data-h="${h.id}">
+    <span class="time">${esc(h.time)}<small>${esc(fmtDate(h.date, {day:'numeric', month:'short'}))}</small></span>
+    <span class="l1"><span class="role">${esc(d.role)}</span><span class="client">${esc(d.client)}</span></span>
+    <span class="l2">${esc(court(d.court).short)} · ${esc(h.salle)}</span>
+    <span class="l3"><span class="chip ${st.cls}">${esc(st.fr)} <span class="ar">${esc(st.ar)}</span></span>${h.dirty ? '<span class="chip warn">Modifié localement</span>' : ''}${reminders(h)}</span>
+  </button>`;
+}
+function bindHearingCards(root){ $$('[data-h]', root).forEach(b => b.onclick = () => go('cr', {id:b.dataset.h})); }
+function viewAgenda(root){
+  const mode = state.agendaMode;
+  const horizon = mode === 'day' ? 0 : 6;
+  const list = state.hearings.filter(h => { const n = daysFrom(h.date); return n >= 0 && n <= horizon; }).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  const byDay = {}; list.forEach(h => (byDay[h.date] = byDay[h.date] || []).push(h));
+  const cacheTime = new Date(state.cacheAt).toLocaleTimeString(loc(), {hour:'2-digit', minute:'2-digit'});
+  const todayCount = state.hearings.filter(h => daysFrom(h.date) === 0).length;
+  root.innerHTML = `
+    <div class="page-head"><div class="grow"><div class="eyebrow">${esc(fmtDay(isoOff(0)))}</div><h1>${esc(t('agendaT'))}</h1></div>
+      <div class="langsel" role="group" aria-label="Période"><button type="button" data-m="day" aria-pressed="${mode === 'day'}">${esc(t('day'))} <span class="mono">${todayCount}</span></button><button type="button" data-m="week" aria-pressed="${mode === 'week'}">${esc(t('week'))}</button></div></div>
+    <div class="cache-note ${state.online ? '' : 'off'}">${state.online ? ICON.cloud : ICON.cloudoff}
+      <span>${state.online ? `Agenda des 30 prochains jours et dossiers en cache local · mis à jour à ${esc(cacheTime)}.` : `<b>Hors-ligne.</b> Vous consultez le cache local (mis à jour à ${esc(cacheTime)}). Les comptes-rendus seront synchronisés au retour du réseau.`}</span></div>
+    ${list.length ? Object.entries(byDay).map(([date, hs]) => `<div class="day"><div class="day-label"><span>${esc(fmtDay(date))}</span><span class="muted">${esc(relDay(date))} · ${hs.length} audience${hs.length > 1 ? 's' : ''}</span></div>${hs.map(hearingCard).join('')}</div>`).join('')
+      : `<div class="empty card">Aucune audience ${mode === 'day' ? "aujourd'hui" : 'sur les 7 prochains jours'}.</div>`}`;
+  $$('[data-m]').forEach(b => b.onclick = () => { state.agendaMode = b.dataset.m; render(); });
+  bindHearingCards(root);
+}
+
+/* ---------- Compte-rendu d'audience ---------- */
+function viewCR(root){
+  const h = state.hearings.find(x => x.id === state.view.id); if (!h) return go('agenda');
+  const d = dossier(h.dossierId);
+  const cur = h.status === 'prevue' ? '' : h.status;
+  root.innerHTML = `
+    <button class="back" type="button" data-nav="agenda">${ICON.back}${esc(t('agenda'))}</button>
+    <div class="page-head"><div class="grow"><div class="eyebrow">Compte-rendu express</div><h1>Issue de l'audience</h1></div></div>
+    <div class="hearing-sum"><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span class="role">${esc(d.role)}</span><b>${esc(d.client)}</b><span class="muted">c. ${esc(d.adverse)}</span></div>
+      <div class="muted small">${esc(court(d.court).fr)} · ${esc(h.salle)} · ${esc(fmtDay(h.date))} à ${esc(h.time)}</div></div>
+    <form class="form" id="crf" novalidate>
+      <div class="field"><span class="label" id="hsl">Statut de l'audience <span class="req">*</span></span>
+        <div class="seg" role="radiogroup" aria-labelledby="hsl">
+          ${['effectuee','reportee','deliberee'].map(k => `<label><input type="radio" name="hs" value="${k}" ${cur === k ? 'checked' : ''}><span>${esc(H_STATUS[k].fr)}</span><span class="ar">${esc(H_STATUS[k].ar)}</span></label>`).join('')}
+        </div><span class="hint" id="hsHint"></span></div>
+      <div class="field" id="dateField" ${cur === 'reportee' ? '' : 'hidden'}>
+        <label for="nd">Nouvelle date d'audience <span class="ar">تاريخ الجلسة القادمة</span></label>
+        <input class="input" type="date" id="nd" min="${h.date}" value="${h.nextDate || ''}"><span class="hint" id="ndHint">Le prochain passage sera ajouté à l'agenda et le client prévenu.</span></div>
+      <div class="field"><label for="dec">Issue / Décision <span class="ar">منطوق القرار أو سبب التأجيل</span></label>
+        <textarea class="input ar" id="dec" dir="rtl" lang="ar" placeholder="تأجيل لتقديم الجواب">${esc(h.decision)}</textarea>
+        <div class="phrases">${AR_PHRASES.map(p => `<button type="button" data-ph="${esc(p)}">${esc(p)}</button>`).join('')}</div></div>
+      <div class="field"><label for="note">Note interne <span class="muted small" style="font-weight:500;display:inline-flex;gap:4px;align-items:center">${ICON.lock} non visible par le client</span></label>
+        <textarea class="input" id="note" placeholder="Ex. : le confrère adverse a demandé un délai, prévoir les conclusions avant mardi.">${esc(h.note)}</textarea></div>
+      <div class="form-actions"><button class="btn primary" type="submit">${state.online ? 'Enregistrer et synchroniser' : 'Enregistrer hors-ligne'}</button><button class="btn" type="button" data-nav="agenda">Annuler</button></div>
+      ${state.online ? '' : `<div class="cache-note off">${ICON.cloudoff}<span>Pas de réseau : le compte-rendu sera stocké sur ce téléphone et envoyé automatiquement au retour de la 4G ou du Wi-Fi.</span></div>`}
+    </form>`;
+  const f = $('#crf');
+  $$('input[name="hs"]').forEach(r => r.onchange = () => { $('#dateField').hidden = f.hs.value !== 'reportee'; $('#hsHint').textContent = ''; });
+  $$('[data-ph]').forEach(b => b.onclick = () => { const ta = $('#dec'); ta.value = ta.value ? ta.value.trim() + '، ' + b.dataset.ph : b.dataset.ph; ta.focus(); });
+  f.onsubmit = e => {
+    e.preventDefault();
+    const s = f.hs.value;
+    if (!s) { const hh = $('#hsHint'); hh.className = 'hint err'; hh.textContent = 'Choisissez l\'issue de l\'audience.'; return; }
+    const nd = $('#nd').value;
+    if (s === 'reportee' && (!nd || nd <= h.date)) { const hh = $('#ndHint'); hh.className = 'hint err'; hh.textContent = 'Indiquez une date postérieure à l\'audience du ' + fmtDate(h.date) + '.'; $('#nd').focus(); return; }
+    Object.assign(h, {status:s, decision:$('#dec').value.trim(), note:$('#note').value.trim(), updatedAt:new Date().toISOString()});
+    if (s === 'reportee') {
+      h.nextDate = nd;
+      if (!state.hearings.some(x => x.dossierId === d.id && x.date === nd)) state.hearings.push({id:uid(), dossierId:d.id, date:nd, time:h.time, salle:h.salle, status:'prevue', decision:'', note:'', dirty:!state.online});
+    }
+    d.last = isoOff(0);
+    if (state.online) { toast(`Compte-rendu synchronisé. ${d.client} est notifié par SMS et push.`, 'ok'); }
+    else {
+      h.dirty = true;
+      state.queue = state.queue.filter(q => q.hearingId !== h.id);
+      state.queue.push({id:uid(), hearingId:h.id, at:new Date().toISOString()});
+      toast('Enregistré sur le téléphone. Synchronisation au retour du réseau.', 'warn');
+    }
+    save(); go('agenda');
+  };
+}
+
+/* ---------- Synchronisation & mode hors-ligne ---------- */
+function payload(q){
+  const h = state.hearings.find(x => x.id === q.hearingId); if (!h) return '{}';
+  return JSON.stringify({hearingId:h.id.slice(0, 8) + '…', status:h.status, nextHearingDate:h.status === 'reportee' ? h.nextDate : null, decisionAr:h.decision || null, internalNote:h.note ? '(privée)' : null, recordedOfflineAt:q.at.slice(0, 16).replace('T', ' ')}, null, 2);
+}
+function viewSync(root){
+  const q = state.queue;
+  root.innerHTML = `
+    <div class="page-head"><div class="grow"><div class="eyebrow">Mode hors-ligne</div><h1>${esc(t('syncT'))}</h1></div>
+      <button class="btn ${state.online ? '' : 'primary'}" type="button" id="toggleNet">${state.online ? 'Simuler la perte de réseau' : 'Simuler le retour du réseau'}</button></div>
+    <div class="sync-grid">
+      <div class="card panel"><h2>État de l'appareil</h2>
+        <dl class="kv"><dt>Réseau</dt><dd style="color:var(${state.online ? '--ok' : '--warn'})">${state.online ? 'En ligne' : 'Hors-ligne'}</dd>
+          <dt>Cache de lecture</dt><dd>${state.dossiers.length} dossiers · ${state.hearings.filter(h => daysFrom(h.date) >= 0 && daysFrom(h.date) <= 30).length} audiences (30 j)</dd>
+          <dt>Dernière mise en cache</dt><dd class="mono">${esc(new Date(state.cacheAt).toLocaleString(loc(), {dateStyle:'short', timeStyle:'short'}))}</dd>
+          <dt>File d'envoi</dt><dd>${q.length} modification${q.length > 1 ? 's' : ''} en attente</dd></dl>
+        <p class="muted small" style="margin:0">Chaque matin, l'application télécharge les dossiers et l'agenda des 30 prochains jours. Les comptes-rendus saisis sans réseau sont marqués « modifié localement » puis envoyés par lot dès le retour de la connexion.</p>
+      </div>
+      <div class="card panel"><div class="section-head"><h2>File de synchronisation</h2><button class="btn sm primary" type="button" id="syncNow" ${!q.length || !state.online ? 'disabled' : ''}>Synchroniser</button></div>
+        ${q.length ? q.map(x => { const h = state.hearings.find(y => y.id === x.hearingId); const d = h && dossier(h.dossierId); return `<div class="qitem"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="chip warn">POST /api/hearings/sync</span><span class="role">${esc(d ? d.role : '')}</span><span class="muted small">${esc(d ? d.client : '')}</span></div><pre class="payload">${esc(payload(x))}</pre></div>`; }).join('')
+          : `<div class="empty" style="padding:18px 0">Aucune modification en attente.${state.online ? ' Passez hors-ligne puis saisissez un compte-rendu depuis l\'agenda pour tester.' : ''}</div>`}
+      </div>
+    </div>
+    <div class="section"><div class="card panel"><h2>Données de démonstration</h2><p class="muted small" style="margin:0">Les dossiers, pièces et traductions de ce prototype sont fictifs et restent dans ce navigateur.</p><div><button class="btn danger sm" type="button" id="reset">Réinitialiser la démo</button></div></div></div>`;
+  $('#toggleNet').onclick = () => setOnline(!state.online);
+  $('#syncNow').onclick = () => flushQueue();
+  $('#reset').onclick = () => confirmModal('Réinitialiser la démo ?', 'Toutes les affaires, pièces et traductions ajoutées seront remplacées par les données d\'exemple.', 'Réinitialiser', () => {
+    const lang = state.lang; try { localStorage.removeItem(STORE); } catch (e) {}
+    load(); state.lang = lang; applyLang(); save(); go('dossiers'); toast('Démo réinitialisée.');
+  }, true);
+}
+function setOnline(on){
+  if (state.online === on) return;
+  state.online = on;
+  if (on) { toast('Réseau rétabli.'); flushQueue(); } else toast('Réseau perdu : passage en mode hors-ligne.', 'warn');
+  render();
+}
+let syncing = false;
+function flushQueue(){
+  if (syncing || !state.online || !state.queue.length) return;
+  syncing = true;
+  const n = state.queue.length;
+  $('#syncText').textContent = `Synchronisation de ${n} modification${n > 1 ? 's' : ''} vers le serveur…`;
+  $('#syncbanner').hidden = false;
+  setTimeout(() => {
+    syncing = false; $('#syncbanner').hidden = true;
+    if (!state.online) return;
+    state.queue.forEach(q => { const h = state.hearings.find(x => x.id === q.hearingId); if (h) h.dirty = false; });
+    state.hearings.forEach(h => h.dirty = false);
+    state.queue = []; state.cacheAt = new Date().toISOString(); save();
+    toast(`${n} compte${n > 1 ? 's' : ''}-rendu${n > 1 ? 's' : ''} synchronisé${n > 1 ? 's' : ''}. Clients notifiés par SMS et push.`, 'ok');
+    render();
+  }, 1800);
+}
+$('#net').addEventListener('click', () => setOnline(!state.online));
+window.addEventListener('online', () => setOnline(true));
+window.addEventListener('offline', () => setOnline(false));
+
+/* ---------- Modales & toasts ---------- */
+let lastFocus = null;
+function openModal(html, cls = ''){
+  lastFocus = document.activeElement;
+  $('#modalRoot').innerHTML = `<div class="scrim" id="scrim"><div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div></div>`;
+  $('#scrim').addEventListener('click', e => { if (e.target.id === 'scrim' || e.target.closest('[data-close]')) closeModal(); });
+  const first = $('#modalRoot .modal input, #modalRoot .modal button:not([data-close]), #modalRoot .modal select');
+  if (first) first.focus();
+}
+function closeModal(){ $('#modalRoot').innerHTML = ''; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#scrim')) closeModal(); });
+function confirmModal(title, body, okLabel, onOk, danger){
+  openModal(`<div class="modal-head"><h2>${esc(title)}</h2></div><p style="margin:0">${body}</p>
+    <div class="form-actions"><button class="btn ${danger ? 'primary' : 'primary'}" type="button" id="cOk" ${danger ? 'style="background:var(--danger);border-color:var(--danger);color:#fff"' : ''}>${esc(okLabel)}</button><button class="btn" type="button" data-close>Annuler</button></div>`);
+  $('#cOk').onclick = () => { closeModal(); onOk(); };
+}
+function toast(msg, kind = ''){
+  const el = document.createElement('div'); el.className = 'toast ' + kind; el.textContent = msg;
+  $('#toasts').appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+
+/* ---------- Démarrage ---------- */
+load(); applyLang(); render();
+})();
+</script>
+<!--ARTIFACT-BODY-END-->
+</body>
+</html>
